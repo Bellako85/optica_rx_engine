@@ -47,15 +47,11 @@ class ProductTemplate(models.Model):
     # MATERIAL
     # ==========================================================
 
-    material_optico = fields.Selection([
-        ('cr39', 'CR39'),
-        ('poly', 'Policarbonato'),
-        ('156', 'Hi-Index 1.56'),
-        ('160', 'Hi-Index 1.60'),
-        ('167', 'Hi-Index 1.67'),
-        ('174', 'Hi-Index 1.74'),
-        ('trivex', 'Trivex'),
-    ], string="Material")
+    material_id = fields.Many2one(
+        'optica.material',
+        string='Material',
+        ondelete='restrict'
+    )
 
     # ==========================================================
     # DISEÑO DEL PROGRESIVO
