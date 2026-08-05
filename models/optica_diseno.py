@@ -31,7 +31,7 @@ class OpticaDiseno(models.Model):
     laboratorio_id = fields.Many2one(
         'res.partner',
         string='Laboratorio',
-        domain=[('category_id.name', '=', 'Laboratorio')],
+        domain=[('es_laboratorio','=',True)]
         ondelete='restrict'
     )
 
