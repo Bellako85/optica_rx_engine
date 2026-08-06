@@ -13,6 +13,7 @@ class ProductTemplate(models.Model):
     rx_tipo = fields.Selection([
         ('monofocal', 'Monofocal'),
         ('bifocal', 'Bifocal'),
+        ('blend', 'Blend'),
         ('progresivo', 'Progresivo'),
         ('ocupacional', 'Ocupacional'),
         ('contacto', 'Lente de contacto'),
