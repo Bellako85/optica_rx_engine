@@ -56,6 +56,11 @@ class OpticaMaterial(models.Model):
         default=True
     )
 
+    blend = fields.Boolean(
+        string="Blend",
+        default=True
+    )
+
     progresivo = fields.Boolean(
         string="Progresivo",
         default=True
