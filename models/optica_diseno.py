@@ -38,6 +38,7 @@ class OpticaDiseno(models.Model):
     tipo_lente = fields.Selection([
         ('monofocal', 'Monofocal'),
         ('bifocal', 'Bifocal'),
+        ('blend', 'Blend'),
         ('progresivo', 'Progresivo'),
         ('ocupacional', 'Ocupacional'),
     ], string="Tipo de lente", required=True)
