@@ -91,12 +91,24 @@ class OpticaCotizadorEngine(models.AbstractModel):
 
     @api.model
     def determinar_serie(self, graduacion):
-        """
-        Determina la serie RX
-        para fabricación convencional.
-        """
+    """
+    Obtiene las series RX que ya fueron calculadas
+    por el módulo de graduaciones.
 
-        pass
+    Se conserva la serie de cada ojo por separado:
+        - OD = ojo derecho
+        - OI = ojo izquierdo
+
+    El cotizador no recalcula las series.
+    """
+
+    if not graduacion:
+        return False
+
+    return {
+        'od': graduacion.serie_recomendada_od,
+        'oi': graduacion.serie_recomendada_oi,
+    }
 
     # ==========================================================
     # PASO 3
