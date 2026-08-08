@@ -115,17 +115,38 @@ class OpticaCotizadorEngine(models.AbstractModel):
     # ==========================================================
 
     @api.model
-    def obtener_materiales(
-        self,
-        graduacion,
-        tipo,
-        serie
-    ):
-        """
-        Devuelve los materiales compatibles.
-        """
+    def obtener_materiales(self, tipo_lente, serie=None):
+    """
+    Obtiene los materiales compatibles con el tipo de lente.
 
-        pass
+    La serie se recibe para futuras reglas de compatibilidad,
+    pero por ahora el material se filtra únicamente por
+    el tipo de lente.
+    """
+
+    if not tipo_lente:
+        return self.env['optica.material']
+
+    dominio = [
+        ('active', '=', True),
+    ]
+
+    if tipo_lente == 'monofocal':
+        dominio.append(('monofocal', '=', True))
+
+    elif tipo_lente == 'multifocal':
+        # Multifocal significa que posteriormente el usuario
+        # podrá elegir Bifocal o Progresivo.
+        dominio += [
+            '|',
+            ('bifocal', '=', True),
+            ('progresivo', '=', True),
+        ]
+
+    return self.env['optica.material'].search(
+        dominio,
+        order='sequence, name'
+    )
 
     # ==========================================================
     # PASO 4
