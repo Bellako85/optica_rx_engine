@@ -64,17 +64,26 @@ class OpticaCotizadorEngine(models.AbstractModel):
 
     @api.model
     def determinar_tipo_lente(self, graduacion):
-        """
-        Determina si la graduación es:
+    """
+    Determina el tipo general de lente.
 
-        - Monofocal
-        - Multifocal
+    Sin adición:
+        monofocal
 
-        La decisión entre Bifocal o Progresivo
-        la toma posteriormente el usuario.
-        """
+    Con adición:
+        multifocal
 
-        pass
+    La elección entre bifocal y progresivo
+    se hará posteriormente en el cotizador.
+    """
+
+    if not graduacion:
+        return False
+
+    if graduacion.adicion and graduacion.adicion > 0:
+        return 'multifocal'
+
+    return 'monofocal'
 
     # ==========================================================
     # PASO 2
