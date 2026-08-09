@@ -153,19 +153,64 @@ class OpticaCotizadorEngine(models.AbstractModel):
     # ==========================================================
 
     @api.model
-    def obtener_laboratorios(
-        self,
-        graduacion,
-        tipo,
-        serie,
-        materiales
-    ):
-        """
-        Busca los laboratorios
-        compatibles con la cotización.
-        """
+    def obtener_laboratorios(self, tipo_lente, subtipo=None):
+    """
+    Obtiene los laboratorios compatibles con el tipo de lente.
 
-        pass
+    Parámetros:
+        tipo_lente:
+            monofocal / multifocal
+
+        subtipo:
+            bifocal / progresivo
+
+    Reglas:
+        - Monofocal: no necesita seleccionar laboratorio.
+        - Bifocal: laboratorios que fabriquen bifocal.
+        - Progresivo: laboratorios que fabriquen progresivo.
+    """
+
+    # ------------------------------------------------------
+    # MONOFOCAL
+    # ------------------------------------------------------
+
+    if tipo_lente == 'monofocal':
+        return self.env['res.partner'].browse()
+
+    # ------------------------------------------------------
+    # MULTIFOCAL
+    # ------------------------------------------------------
+
+    if tipo_lente != 'multifocal':
+        return self.env['res.partner'].browse()
+
+    dominio = [
+        ('es_laboratorio', '=', True),
+        ('activo_cotizador', '=', True),
+    ]
+
+    # ------------------------------------------------------
+    # BIFOCAL
+    # ------------------------------------------------------
+
+    if subtipo == 'bifocal':
+        dominio.append(
+            ('fabrica_bifocal', '=', True)
+        )
+
+    # ------------------------------------------------------
+    # PROGRESIVO
+    # ------------------------------------------------------
+
+    elif subtipo == 'progresivo':
+        dominio.append(
+            ('fabrica_progresivo', '=', True)
+        )
+
+    return self.env['res.partner'].search(
+        dominio,
+        order='prioridad_cotizador, name'
+    )
 
     # ==========================================================
     # PASO 5
