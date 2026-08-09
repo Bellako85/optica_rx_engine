@@ -217,18 +217,42 @@ class OpticaCotizadorEngine(models.AbstractModel):
     # ==========================================================
 
     @api.model
-    def obtener_disenos(
-        self,
-        graduacion,
-        tipo,
-        laboratorios
-    ):
-        """
-        Devuelve los diseños
-        disponibles para el laboratorio.
-        """
+    def obtener_disenos(self, tipo_lente, laboratorio=None):
+    """
+    Obtiene los diseños disponibles para el tipo de lente
+    y laboratorio seleccionado.
 
-        pass
+    Los diseños deben estar:
+        - Activos
+        - Disponibles en el cotizador
+        - Asociados al tipo de lente solicitado
+
+    Para multifocales:
+        el laboratorio seleccionado es obligatorio.
+    """
+
+    if not tipo_lente:
+        return self.env['optica.diseno']
+
+    dominio = [
+        ('active', '=', True),
+        ('activo_cotizador', '=', True),
+        ('tipo_lente', '=', tipo_lente),
+    ]
+
+    # ------------------------------------------------------
+    # LABORATORIO
+    # ------------------------------------------------------
+
+    if laboratorio:
+        dominio.append(
+            ('laboratorio_id', '=', laboratorio.id)
+        )
+
+    return self.env['optica.diseno'].search(
+        dominio,
+        order='prioridad, sequence, name'
+    )
 
     # ==========================================================
     # PASO 6
