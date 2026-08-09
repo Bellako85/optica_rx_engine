@@ -10,6 +10,7 @@
     'depends': [
         'base',
         'product',
+        'odoo_graduacion_paciente',
     ],
     'installable': True,
     'application': False,
