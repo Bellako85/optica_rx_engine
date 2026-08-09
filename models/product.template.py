@@ -58,15 +58,12 @@ class ProductTemplate(models.Model):
     # DISEÑO DEL PROGRESIVO
     # ==========================================================
 
-    progresivo_diseno = fields.Selection([
-        ('', 'No aplica'),
-        ('easy', 'Easy'),
-        ('comfort', 'Comfort'),
-        ('premium', 'Premium'),
-        ('office', 'Office'),
-        ('digital', 'Digital'),
-        ('elite', 'Elite'),
-    ], string="Diseño progresivo")
+    diseno_id = fields.Many2one(
+        'optica.diseno',
+        string='Diseño',
+        domain="[('activo_cotizador', '=', True)]",
+        ondelete='restrict',
+    )
 
     # ==========================================================
     # TRATAMIENTO
