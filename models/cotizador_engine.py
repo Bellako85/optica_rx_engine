@@ -259,18 +259,79 @@ class OpticaCotizadorEngine(models.AbstractModel):
     # ==========================================================
 
     @api.model
-    def obtener_productos(
-        self,
-        graduacion,
-        tipo,
-        serie,
-        materiales,
-        laboratorios,
-        disenos
-    ):
-        """
-        Devuelve los productos
-        finales para cotizar.
-        """
+def obtener_productos(
+    self,
+    tipo_lente,
+    material=None,
+    laboratorio=None,
+    diseno=None,
+    serie=None,
+):
+    """
+    Obtiene productos compatibles con la configuración
+    seleccionada en el cotizador.
+    """
 
-        pass
+    Product = self.env['product.template']
+
+    if not tipo_lente:
+        return Product
+
+    dominio = [
+        ('sale_ok', '=', True),
+        ('disponible_cotizador', '=', True),
+        ('rx_tipo', '=', tipo_lente),
+    ]
+
+    # ------------------------------------------------------
+    # MATERIAL
+    # ------------------------------------------------------
+
+    if material:
+        dominio.append(
+            ('material_id', '=', material.id)
+        )
+
+    # ------------------------------------------------------
+    # LABORATORIO
+    # ------------------------------------------------------
+
+    if laboratorio:
+        dominio.append(
+            ('laboratorio_id', '=', laboratorio.id)
+        )
+
+    # ------------------------------------------------------
+    # DISEÑO
+    # ------------------------------------------------------
+
+    if diseno:
+        dominio.append(
+            ('diseno_id', '=', diseno.id)
+        )
+
+    # ------------------------------------------------------
+    # SERIE RX
+    # ------------------------------------------------------
+
+    if serie:
+        if isinstance(serie, str):
+
+            serie_record = self.env['optica.rx.serie'].search([
+                ('codigo', '=', serie)
+            ], limit=1)
+
+            if serie_record:
+                dominio.append(
+                    ('rx_series_ids', 'in', serie_record.id)
+                )
+
+        elif hasattr(serie, 'id'):
+            dominio.append(
+                ('rx_series_ids', 'in', serie.id)
+            )
+
+    return Product.search(
+        dominio,
+        order='prioridad_cotizador, name'
+    )
