@@ -59,6 +59,50 @@ class OpticaCotizadorEngine(models.AbstractModel):
             "oi": graduacion.serie_recomendada_oi,
         }
 
+    
+    # ==========================================================
+    # PASO 2.1 - VARIANTES COMPATIBLES CON LA SERIE
+    # ==========================================================
+
+    @api.model
+    def obtener_variantes_por_serie(self, template, serie_rx):
+        """
+        Obtiene las variantes reales del producto compatibles
+        con una serie RX previamente calculada por graduacion.py.
+
+        NO calcula la serie.
+
+        Traduce:
+            RX1 -> 1ª SERIE
+            RX2 -> 2ª SERIE
+            RX3 -> 3ª SERIE
+        """
+
+        ProductProduct = self.env['product.product']
+
+        if not template or not serie_rx:
+            return ProductProduct
+
+        mapa_series = {
+            'RX1': '1ª SERIE',
+            'RX2': '2ª SERIE',
+            'RX3': '3ª SERIE',
+        }
+
+        nombre_serie = mapa_series.get(serie_rx)
+
+        if not nombre_serie:
+            return ProductProduct
+
+        return template.product_variant_ids.filtered(
+            lambda variante: any(
+                valor.attribute_id.name == 'SERIE'
+                and valor.name == nombre_serie
+                for valor in variante.product_template_attribute_value_ids
+            )
+        )
+    
+    
     # ==========================================================
     # PASO 3
     # ==========================================================
