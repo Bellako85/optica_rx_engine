@@ -124,6 +124,42 @@ class OpticaCotizadorEngine(models.AbstractModel):
         )
 
         return materiales
+
+    @api.model
+    def obtener_tratamientos_desde_variantes(self, variantes, material):
+        """
+        Devuelve los tratamientos disponibles para un material
+        dentro de un conjunto de variantes válidas.
+
+        material puede ser:
+            - un registro product.template.attribute.value
+            - o el nombre del material
+        """
+
+        if not variantes or not material:
+            return self.env['product.template.attribute.value']
+
+        nombre_material = (
+            material.name
+            if hasattr(material, 'name')
+            else material
+        )
+
+        variantes_material = variantes.filtered(
+            lambda variante: any(
+                valor.attribute_id.name == 'MATERIAL'
+                and valor.name == nombre_material
+                for valor in variante.product_template_attribute_value_ids
+            )
+        )
+
+        tratamientos = variantes_material.mapped(
+            'product_template_attribute_value_ids'
+        ).filtered(
+            lambda valor: valor.attribute_id.name == 'TRATAMIENTO'
+        )
+
+        return tratamientos
     
     # ==========================================================
     # PASO 3
