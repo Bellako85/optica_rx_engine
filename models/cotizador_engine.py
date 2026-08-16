@@ -160,6 +160,64 @@ class OpticaCotizadorEngine(models.AbstractModel):
         )
 
         return tratamientos
+
+    @api.model
+    def buscar_variante_exacta(
+        self,
+        template,
+        serie_rx,
+        material,
+        tratamiento,
+    ):
+        """
+        Busca la variante exacta de product.product a partir de:
+
+            - Serie RX ya calculada por graduacion.py
+            - Material elegido
+            - Tratamiento elegido
+
+        No recalcula series.
+        No inventa combinaciones.
+        Solo busca entre las variantes reales existentes en Odoo.
+        """
+
+        ProductProduct = self.env['product.product']
+
+        if not template or not serie_rx or not material or not tratamiento:
+            return ProductProduct
+
+        mapa_series = {
+            'RX1': '1ª SERIE',
+            'RX2': '2ª SERIE',
+            'RX3': '3ª SERIE',
+        }
+
+        nombre_serie = mapa_series.get(serie_rx)
+
+        if not nombre_serie:
+            return ProductProduct
+
+        variantes = template.product_variant_ids.filtered(
+            lambda variante: all([
+                any(
+                    valor.attribute_id.name == 'SERIE'
+                    and valor.name == nombre_serie
+                    for valor in variante.product_template_attribute_value_ids
+                ),
+                any(
+                    valor.attribute_id.name == 'MATERIAL'
+                    and valor.name == material
+                    for valor in variante.product_template_attribute_value_ids
+                ),
+                any(
+                    valor.attribute_id.name == 'TRATAMIENTO'
+                    and valor.name == tratamiento
+                    for valor in variante.product_template_attribute_value_ids
+                ),
+            ])
+        )
+
+        return variantes
     
     # ==========================================================
     # PASO 3
