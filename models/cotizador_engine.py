@@ -114,16 +114,16 @@ class OpticaCotizadorEngine(models.AbstractModel):
         'MICA GRADUADA' presentes en product.product.
         """
 
-    if not variantes:
-        return self.env['product.template.attribute.value']
+        if not variantes:
+            return self.env['product.template.attribute.value']
 
-    materiales = variantes.mapped(
-        'product_template_attribute_value_ids'
-    ).filtered(
-        lambda valor: valor.attribute_id.name == 'MICA GRADUADA'
-    )
+        materiales = variantes.mapped(
+            'product_template_attribute_value_ids'
+        ).filtered(
+            lambda valor: valor.attribute_id.name == 'MICA GRADUADA'
+        )
 
-    return materiales
+        return materiales
     
     # ==========================================================
     # PASO 3
