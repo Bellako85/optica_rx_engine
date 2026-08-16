@@ -120,7 +120,7 @@ class OpticaCotizadorEngine(models.AbstractModel):
         materiales = variantes.mapped(
             'product_template_attribute_value_ids'
         ).filtered(
-            lambda valor: valor.attribute_id.name == 'MICA GRADUADA'
+            lambda valor: valor.attribute_id.name == 'MATERIAL'
         )
 
         return materiales
