@@ -102,6 +102,28 @@ class OpticaCotizadorEngine(models.AbstractModel):
             )
         )
     
+
+    @api.model
+    def obtener_materiales_desde_variantes(self, variantes):
+        """
+        Obtiene los materiales únicos disponibles
+        a partir de un conjunto de variantes válidas.
+
+        No inventa materiales ni recalcula compatibilidades.
+        Solo lee los valores reales del atributo
+        'MICA GRADUADA' presentes en product.product.
+        """
+
+    if not variantes:
+        return self.env['product.template.attribute.value']
+
+    materiales = variantes.mapped(
+        'product_template_attribute_value_ids'
+    ).filtered(
+        lambda valor: valor.attribute_id.name == 'MICA GRADUADA'
+    )
+
+    return materiales
     
     # ==========================================================
     # PASO 3
