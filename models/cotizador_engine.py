@@ -219,6 +219,33 @@ class OpticaCotizadorEngine(models.AbstractModel):
 
         return variantes
     
+    @api.model
+    def buscar_template_progresivo(
+        self,
+        laboratorio,
+        diseno,
+        material,
+    ):
+        """
+        Busca el product.template progresivo exacto
+        usando la metadata óptica del producto.
+
+        No depende del nombre comercial del template.
+        """
+
+        ProductTemplate = self.env['product.template']
+
+        if not laboratorio or not diseno or not material:
+            return ProductTemplate
+
+        return ProductTemplate.search([
+            ('rx_tipo', '=', 'progresivo'),
+            ('laboratorio_id', '=', laboratorio.id),
+            ('diseno_id', '=', diseno.id),
+            ('material_id', '=', material.id),
+            ('disponible_cotizador', '=', True),
+        ], limit=1)
+    
     # ==========================================================
     # PASO 3
     # ==========================================================
