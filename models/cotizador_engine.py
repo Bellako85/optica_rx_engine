@@ -269,7 +269,7 @@ class OpticaCotizadorEngine(models.AbstractModel):
 
 
     @api.model
-        def obtener_o_crear_variante_progresivo(
+    def obtener_o_crear_variante_progresivo(
         self,
         template,
         tratamiento,
