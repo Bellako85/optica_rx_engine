@@ -266,6 +266,47 @@ class OpticaCotizadorEngine(models.AbstractModel):
             return self.env['product.attribute.value']
 
         return lineas.mapped('value_ids')
+
+
+    @api.model
+        def obtener_o_crear_variante_progresivo(
+        self,
+        template,
+        tratamiento,
+    ):
+        """
+        Devuelve la variante progresiva correspondiente
+        al tratamiento seleccionado.
+
+        Si la variante dinámica todavía no existe,
+        Odoo la crea.
+        """
+
+        ProductProduct = self.env['product.product']
+
+        if not template or not tratamiento:
+            return ProductProduct
+
+        linea = template.attribute_line_ids.filtered(
+            lambda l: 'TRATAMIENTO' in l.attribute_id.name.upper()
+        )[:1]
+
+        if not linea:
+            return ProductProduct
+
+        ptav = linea.product_template_value_ids.filtered(
+            lambda v: v.product_attribute_value_id.id == tratamiento.id
+        )[:1]
+
+        if not ptav:
+            return ProductProduct
+
+        variante = template._get_variant_for_combination(ptav)
+
+        if variante:
+            return variante
+
+        return template._create_product_variant(ptav)
     
     # ==========================================================
     # PASO 3
