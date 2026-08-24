@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_optica_cotizador_wizard_form" model="ir.ui.view">
+        <field name="name">optica.cotizador.wizard.form</field>
+        <field name="model">optica.cotizador.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cotizador Óptico">
+
+                <group>
+                    <field name="graduacion_id"/>
+                    <field name="tipo_general" readonly="1"/>
+                    <field name="subtipo"/>
+                </group>
+
+                <group string="Configuración Progresivo">
+                    <field name="laboratorio_id"/>
+                    <field name="diseno_id"/>
+                    <field name="material_id"/>
+                    <field name="tratamiento_id"/>
+                </group>
+
+                <group string="Resultado">
+                    <field name="template_id" readonly="1"/>
+                    <field name="producto_id" readonly="1"/>
+                    <field name="precio" readonly="1"/>
+                </group>
+
+                <footer>
+                    <button string="Cerrar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="action_optica_cotizador_wizard" model="ir.actions.act_window">
+        <field name="name">Cotizador Óptico</field>
+        <field name="res_model">optica.cotizador.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
