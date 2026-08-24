@@ -307,6 +307,83 @@ class OpticaCotizadorEngine(models.AbstractModel):
             return variante
 
         return template._create_product_variant(ptav)
+
+    @api.model
+    def cotizar_progresivo(
+        self,
+        graduacion,
+        laboratorio,
+        diseno,
+        material,
+        tratamiento=None,
+    ):
+        """
+        Flujo completo para lentes progresivos.
+
+        Reglas:
+            - La graduación debe tener adición.
+            - La serie RX NO se usa para progresivos.
+            - El laboratorio, diseño y material identifican
+              el product.template correcto.
+            - El tratamiento se toma de los atributos del template.
+            - Si el tratamiento ya tiene variante dinámica creada,
+              se reutiliza.
+            - Si no existe todavía, Odoo la crea dinámicamente.
+        """
+
+        ProductTemplate = self.env['product.template']
+        ProductProduct = self.env['product.product']
+
+        if not graduacion:
+            return {
+                'tipo': False,
+                'template': ProductTemplate,
+                'tratamientos': self.env['product.attribute.value'],
+                'variante': ProductProduct,
+            }
+
+        tipo = self.determinar_tipo_lente(graduacion)
+
+        if tipo != 'multifocal':
+            return {
+                'tipo': tipo,
+                'template': ProductTemplate,
+                'tratamientos': self.env['product.attribute.value'],
+                'variante': ProductProduct,
+            }
+
+        template = self.buscar_template_progresivo(
+            laboratorio,
+            diseno,
+            material,
+        )
+
+        if not template:
+            return {
+                'tipo': 'progresivo',
+                'template': ProductTemplate,
+                'tratamientos': self.env['product.attribute.value'],
+                'variante': ProductProduct,
+            }
+
+        tratamientos = self.obtener_tratamientos_template(
+            template
+        )
+
+        variante = ProductProduct
+
+        if tratamiento:
+            variante = self.obtener_o_crear_variante_progresivo(
+                template,
+                tratamiento,
+            )
+
+        return {
+            'tipo': 'progresivo',
+            'template': template,
+            'tratamientos': tratamientos,
+            'variante': variante,
+        }
     
     # ==========================================================
     # PASO 3
