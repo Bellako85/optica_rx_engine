@@ -12,6 +12,11 @@
         'product',
         'odoo_graduacion_paciente',
     ],
+
+    'data': [
+        'views/cotizador_wizard_views.xml',
+    ],
+    
     'installable': True,
     'application': False,
 }
