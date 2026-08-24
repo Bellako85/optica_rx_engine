@@ -14,6 +14,7 @@
     ],
 
     'data': [
+        'security/ir.model.access.csv',
         'views/cotizador_wizard_views.xml',
     ],
     
