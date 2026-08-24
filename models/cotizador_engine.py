@@ -245,6 +245,27 @@ class OpticaCotizadorEngine(models.AbstractModel):
             ('material_id', '=', material.id),
             ('disponible_cotizador', '=', True),
         ], limit=1)
+
+    @api.model
+    def obtener_tratamientos_template(self, template):
+        """
+        Devuelve los valores de tratamiento disponibles
+        en un product.template progresivo.
+
+        Funciona aunque las variantes sean dinámicas.
+        """
+
+        if not template:
+        return self.env['product.attribute.value']
+
+        lineas = template.attribute_line_ids.filtered(
+            lambda linea: 'TRATAMIENTO' in linea.attribute_id.name.upper()
+        )
+
+        if not lineas:
+            return self.env['product.attribute.value']
+
+        return lineas.mapped('value_ids')
     
     # ==========================================================
     # PASO 3
