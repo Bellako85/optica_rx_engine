@@ -256,7 +256,7 @@ class OpticaCotizadorEngine(models.AbstractModel):
         """
 
         if not template:
-        return self.env['product.attribute.value']
+            return self.env['product.attribute.value']
 
         lineas = template.attribute_line_ids.filtered(
             lambda linea: 'TRATAMIENTO' in linea.attribute_id.name.upper()
