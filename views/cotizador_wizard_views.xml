@@ -43,4 +43,14 @@
         <field name="target">new</field>
     </record>
 
+    <menuitem id="menu_optica_rx_root"
+              name="Óptica RX"
+              sequence="90"/>
+
+    <menuitem id="menu_optica_cotizador"
+              name="Cotizador"
+              parent="menu_optica_rx_root"
+              action="action_optica_cotizador_wizard"
+              sequence="10"/>
+
 </odoo>
