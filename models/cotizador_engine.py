@@ -267,7 +267,6 @@ class OpticaCotizadorEngine(models.AbstractModel):
 
         return lineas.mapped('value_ids')
 
-
     @api.model
     def obtener_o_crear_variante_progresivo(
         self,
