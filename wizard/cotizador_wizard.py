@@ -37,11 +37,21 @@ class OpticaCotizadorWizard(models.TransientModel):
         string='Material OD',
     )
 
+    materiales_od_disponibles_ids = fields.Many2many(
+        'product.attribute.value',
+        string='Materiales disponibles OD',
+    )
+
     tratamiento_od_id = fields.Many2one(
         'product.attribute.value',
         string='Tratamiento OD',
     )
-
+    
+    tratamientos_od_disponibles_ids = fields.Many2many(
+        'product.attribute.value',
+        string='Tratamientos disponibles OD',
+    )
+    
     producto_od_id = fields.Many2one(
         'product.product',
         string='Producto OD',
@@ -58,9 +68,19 @@ class OpticaCotizadorWizard(models.TransientModel):
         string='Material OI',
     )
 
+    materiales_oi_disponibles_ids = fields.Many2many(
+        'product.attribute.value',
+        string='Materiales disponibles OI',
+    )
+
     tratamiento_oi_id = fields.Many2one(
         'product.attribute.value',
         string='Tratamiento OI',
+    )
+
+    tratamientos_oi_disponibles_ids = fields.Many2many(
+        'product.attribute.value',
+        string='Tratamientos disponibles OI',
     )
 
     producto_oi_id = fields.Many2one(
@@ -149,13 +169,17 @@ class OpticaCotizadorWizard(models.TransientModel):
 
             # Campos monofocal OD
             wizard.material_od_id = False
+            wizard.materiales_od_disponibles_ids = False
             wizard.tratamiento_od_id = False
+            wizard.tratamientos_od_disponibles_ids = False
             wizard.producto_od_id = False
             wizard.precio_od = 0.0
 
             # Campos monofocal OI
             wizard.material_oi_id = False
+            wizard.materiales_oi_disponibles_ids = False
             wizard.tratamiento_oi_id = False
+            wizard.tratamientos_oi_disponibles_ids = False
             wizard.producto_oi_id = False
             wizard.precio_oi = 0.0
 
@@ -198,6 +222,14 @@ class OpticaCotizadorWizard(models.TransientModel):
                 variantes_oi
             )
 
+            materiales_od = engine.obtener_materiales_desde_variantes(
+                variantes_od
+            )
+
+            materiales_oi = engine.obtener_materiales_desde_variantes(
+                variantes_oi
+            )
+
             return {
                 'domain': {
                     'material_od_id': [
@@ -209,6 +241,61 @@ class OpticaCotizadorWizard(models.TransientModel):
                 }
             }
 
+    @api.onchange('material_od_id')
+    def _onchange_material_od_id(self):
+        self.tratamiento_od_id = False
+        self.producto_od_id = False
+        self.precio_od = 0.0
+        self.tratamientos_od_disponibles_ids = False
+
+        if not self.material_od_id or not self.serie_od:
+            return
+
+        engine = self.env['optica.cotizador.engine']
+        template_mono = self.env['product.template'].browse(409)
+
+        variantes = engine.obtener_variantes_por_serie(
+            template_mono,
+            self.serie_od,
+        )
+
+        tratamientos = engine.obtener_tratamientos_desde_variantes(
+            variantes,
+            self.material_od_id.name,
+        )
+
+        self.tratamientos_od_disponibles_ids = tratamientos.mapped(
+            'product_attribute_value_id'
+        )    
+
+
+    @api.onchange('material_oi_id')
+    def _onchange_material_oi_id(self):
+        self.tratamiento_oi_id = False
+        self.producto_oi_id = False
+        self.precio_oi = 0.0
+        self.tratamientos_oi_disponibles_ids = False
+
+        if not self.material_oi_id or not self.serie_oi:
+            return
+
+        engine = self.env['optica.cotizador.engine']
+        template_mono = self.env['product.template'].browse(409)
+
+        variantes = engine.obtener_variantes_por_serie(
+            template_mono,
+            self.serie_oi,
+        )
+
+        tratamientos = engine.obtener_tratamientos_desde_variantes(
+            variantes,
+            self.material_oi_id.name,
+        )
+
+        self.tratamientos_oi_disponibles_ids = tratamientos.mapped(
+            'product_attribute_value_id'
+        )
+    
     # ---------------------------------------------------------
     # LABORATORIOS
     # ---------------------------------------------------------
