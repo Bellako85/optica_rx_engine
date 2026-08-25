@@ -28,6 +28,62 @@ class OpticaCotizadorWizard(models.TransientModel):
         readonly=True,
     )
 
+    # ---------------------------------------------------------
+    # CONFIGURACIÓN MONOFOCAL POR OJO
+    # ---------------------------------------------------------
+
+    material_od_id = fields.Many2one(
+        'product.attribute.value',
+        string='Material OD',
+    )
+
+    tratamiento_od_id = fields.Many2one(
+        'product.attribute.value',
+        string='Tratamiento OD',
+    )
+
+    producto_od_id = fields.Many2one(
+        'product.product',
+        string='Producto OD',
+        readonly=True,
+    )
+
+    precio_od = fields.Float(
+        string='Precio OD',
+        readonly=True,
+    )
+
+    material_oi_id = fields.Many2one(
+        'product.attribute.value',
+        string='Material OI',
+    )
+
+    tratamiento_oi_id = fields.Many2one(
+        'product.attribute.value',
+        string='Tratamiento OI',
+    )
+
+    producto_oi_id = fields.Many2one(
+        'product.product',
+        string='Producto OI',
+        readonly=True,
+    )
+
+    precio_oi = fields.Float(
+        string='Precio OI',
+        readonly=True,
+    )
+
+    precio_total = fields.Float(
+        string='Total lentes',
+        readonly=True,
+    )
+
+    subtipo = fields.Selection([
+        ('bifocal', 'Bifocal'),
+        ('progresivo', 'Progresivo'),
+    ], string='Tipo de lente')
+
     subtipo = fields.Selection([
         ('bifocal', 'Bifocal'),
         ('progresivo', 'Progresivo'),
