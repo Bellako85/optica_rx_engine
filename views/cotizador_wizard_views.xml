@@ -10,20 +10,27 @@
                 <group>
                     <field name="graduacion_id"/>
                     <field name="tipo_general" readonly="1"/>
-                    <field name="subtipo"/>
+
+                    <field name="subtipo"
+                           invisible="tipo_general != 'multifocal'"/>
                 </group>
 
-                <group string="Configuración Progresivo">
+                <group string="Series para laboratorio"
+                       invisible="tipo_general != 'monofocal'">
+
+                    <field name="serie_od" readonly="1"/>
+                    <field name="serie_oi" readonly="1"/>
+
+                </group>
+
+                <group string="Configuración Progresivo"
+                       invisible="tipo_general != 'multifocal' or subtipo != 'progresivo'">
+
                     <field name="laboratorio_id"/>
                     <field name="diseno_id"/>
                     <field name="material_id"/>
                     <field name="tratamiento_id"/>
-                </group>
 
-                <group string="Resultado">
-                    <field name="template_id" readonly="1"/>
-                    <field name="producto_id" readonly="1"/>
-                    <field name="precio" readonly="1"/>
                 </group>
 
                 <footer>
