@@ -137,6 +137,8 @@ class OpticaCotizadorWizard(models.TransientModel):
             wizard.subtipo = False
             wizard.serie_od = False
             wizard.serie_oi = False
+
+            # Campos progresivo/general
             wizard.laboratorio_id = False
             wizard.diseno_id = False
             wizard.material_id = False
@@ -144,6 +146,20 @@ class OpticaCotizadorWizard(models.TransientModel):
             wizard.template_id = False
             wizard.producto_id = False
             wizard.precio = 0.0
+
+            # Campos monofocal OD
+            wizard.material_od_id = False
+            wizard.tratamiento_od_id = False
+            wizard.producto_od_id = False
+            wizard.precio_od = 0.0
+
+            # Campos monofocal OI
+            wizard.material_oi_id = False
+            wizard.tratamiento_oi_id = False
+            wizard.producto_oi_id = False
+            wizard.precio_oi = 0.0
+
+            wizard.precio_total = 0.0
 
             if not wizard.graduacion_id:
                 continue
@@ -161,6 +177,37 @@ class OpticaCotizadorWizard(models.TransientModel):
 
                 wizard.serie_od = series.get('od')
                 wizard.serie_oi = series.get('oi')
+
+            template_mono = self.env['product.template'].browse(409)
+
+            variantes_od = engine.obtener_variantes_por_serie(
+                template_mono,
+                wizard.serie_od,
+            )
+
+            variantes_oi = engine.obtener_variantes_por_serie(
+                template_mono,
+                wizard.serie_oi,
+            )
+
+            materiales_od = engine.obtener_materiales_desde_variantes(
+                variantes_od
+            )
+
+            materiales_oi = engine.obtener_materiales_desde_variantes(
+                variantes_oi
+            )
+
+            return {
+                'domain': {
+                    'material_od_id': [
+                        ('id', 'in', materiales_od.ids)
+                    ],
+                    'material_oi_id': [
+                        ('id', 'in', materiales_oi.ids)
+                    ],
+                }
+            }
 
     # ---------------------------------------------------------
     # LABORATORIOS
