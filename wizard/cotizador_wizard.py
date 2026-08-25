@@ -104,11 +104,6 @@ class OpticaCotizadorWizard(models.TransientModel):
         ('progresivo', 'Progresivo'),
     ], string='Tipo de lente')
 
-    subtipo = fields.Selection([
-        ('bifocal', 'Bifocal'),
-        ('progresivo', 'Progresivo'),
-    ], string='Tipo de lente')
-
     laboratorio_id = fields.Many2one(
         'res.partner',
         string='Laboratorio',
@@ -202,44 +197,33 @@ class OpticaCotizadorWizard(models.TransientModel):
                 wizard.serie_od = series.get('od')
                 wizard.serie_oi = series.get('oi')
 
-            template_mono = self.env['product.template'].browse(409)
+                template_mono = self.env['product.template'].browse(409)
 
-            variantes_od = engine.obtener_variantes_por_serie(
-                template_mono,
-                wizard.serie_od,
-            )
+                variantes_od = engine.obtener_variantes_por_serie(
+                    template_mono,
+                    wizard.serie_od,
+                )
 
-            variantes_oi = engine.obtener_variantes_por_serie(
-                template_mono,
-                wizard.serie_oi,
-            )
+                variantes_oi = engine.obtener_variantes_por_serie(
+                    template_mono,
+                    wizard.serie_oi,
+                )
 
-            materiales_od = engine.obtener_materiales_desde_variantes(
-                variantes_od
-            )
+                materiales_od = engine.obtener_materiales_desde_variantes(
+                    variantes_od
+                )
 
-            materiales_oi = engine.obtener_materiales_desde_variantes(
-                variantes_oi
-            )
+                materiales_oi = engine.obtener_materiales_desde_variantes(
+                    variantes_oi
+                )
 
-            materiales_od = engine.obtener_materiales_desde_variantes(
-                variantes_od
-            )
+                wizard.materiales_od_disponibles_ids = materiales_od.mapped(
+                    'product_attribute_value_id'
+                )    
 
-            materiales_oi = engine.obtener_materiales_desde_variantes(
-                variantes_oi
-            )
-
-            return {
-                'domain': {
-                    'material_od_id': [
-                        ('id', 'in', materiales_od.ids)
-                    ],
-                    'material_oi_id': [
-                        ('id', 'in', materiales_oi.ids)
-                    ],
-                }
-            }
+                wizard.materiales_oi_disponibles_ids = materiales_oi.mapped(
+                    'product_attribute_value_id'
+                )
 
     @api.onchange('material_od_id')
     def _onchange_material_od_id(self):
