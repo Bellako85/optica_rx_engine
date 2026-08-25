@@ -33,6 +33,12 @@
 
                 </group>
 
+                <group string="Resultado">
+                    <field name="template_id" readonly="1"/>
+                    <field name="producto_id" readonly="1"/>
+                    <field name="precio" readonly="1"/>
+                </group>
+
                 <footer>
                     <button string="Cerrar"
                             class="btn-secondary"
