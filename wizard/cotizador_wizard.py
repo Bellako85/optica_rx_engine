@@ -39,6 +39,9 @@ class OpticaCotizadorWizard(models.TransientModel):
 
     materiales_od_disponibles_ids = fields.Many2many(
         'product.attribute.value',
+        'optica_cotizador_material_od_rel',
+        'wizard_id',
+        'attribute_value_id',
         string='Materiales disponibles OD',
     )
 
@@ -49,6 +52,9 @@ class OpticaCotizadorWizard(models.TransientModel):
     
     tratamientos_od_disponibles_ids = fields.Many2many(
         'product.attribute.value',
+        'optica_cotizador_tratamiento_od_rel',
+        'wizard_id',
+        'attribute_value_id',
         string='Tratamientos disponibles OD',
     )
     
@@ -70,6 +76,9 @@ class OpticaCotizadorWizard(models.TransientModel):
 
     materiales_oi_disponibles_ids = fields.Many2many(
         'product.attribute.value',
+        'optica_cotizador_material_oi_rel',
+        'wizard_id',
+        'attribute_value_id',
         string='Materiales disponibles OI',
     )
 
@@ -80,6 +89,9 @@ class OpticaCotizadorWizard(models.TransientModel):
 
     tratamientos_oi_disponibles_ids = fields.Many2many(
         'product.attribute.value',
+        'optica_cotizador_tratamiento_oi_rel',
+        'wizard_id',
+        'attribute_value_id',
         string='Tratamientos disponibles OI',
     )
 
