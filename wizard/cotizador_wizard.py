@@ -18,6 +18,16 @@ class OpticaCotizadorWizard(models.TransientModel):
         ('multifocal', 'Multifocal'),
     ], string='Tipo general', readonly=True)
 
+    serie_od = fields.Char(
+        string='Serie OD',
+        readonly=True,
+    )
+
+    serie_oi = fields.Char(
+        string='Serie OI',
+        readonly=True,
+    )
+
     subtipo = fields.Selection([
         ('bifocal', 'Bifocal'),
         ('progresivo', 'Progresivo'),
@@ -69,6 +79,8 @@ class OpticaCotizadorWizard(models.TransientModel):
         for wizard in self:
             wizard.tipo_general = False
             wizard.subtipo = False
+            wizard.serie_od = False
+            wizard.serie_oi = False
             wizard.laboratorio_id = False
             wizard.diseno_id = False
             wizard.material_id = False
@@ -85,6 +97,14 @@ class OpticaCotizadorWizard(models.TransientModel):
             wizard.tipo_general = engine.determinar_tipo_lente(
                 wizard.graduacion_id
             )
+
+            if wizard.tipo_general == 'monofocal':
+                series = engine.determinar_serie(
+                    wizard.graduacion_id
+                )
+
+                wizard.serie_od = series.get('od')
+                wizard.serie_oi = series.get('oi')
 
     # ---------------------------------------------------------
     # LABORATORIOS
