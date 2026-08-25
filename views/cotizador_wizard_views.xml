@@ -23,6 +23,27 @@
 
                 </group>
 
+                <group string="Configuración Monofocal"
+                       invisible="tipo_general != 'monofocal'">
+
+                    <group string="Ojo Derecho">
+                        <field name="material_od_id"/>
+                        <field name="tratamiento_od_id"/>
+                        <field name="producto_od_id" readonly="1"/>
+                        <field name="precio_od" readonly="1"/>
+                    </group>
+
+                    <group string="Ojo Izquierdo">
+                        <field name="material_oi_id"/>
+                        <field name="tratamiento_oi_id"/>
+                        <field name="producto_oi_id" readonly="1"/>
+                        <field name="precio_oi" readonly="1"/>
+                    </group>
+
+                    <field name="precio_total" readonly="1"/>
+
+                </group>
+
                 <group string="Configuración Progresivo"
                        invisible="tipo_general != 'multifocal' or subtipo != 'progresivo'">
 
