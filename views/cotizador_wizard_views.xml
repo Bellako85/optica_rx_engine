@@ -26,16 +26,30 @@
                 <group string="Configuración Monofocal"
                        invisible="tipo_general != 'monofocal'">
 
+                    <!-- Campos auxiliares para los domains -->
+                    <field name="materiales_od_disponibles_ids" invisible="1"/>
+                    <field name="tratamientos_od_disponibles_ids" invisible="1"/>
+                    <field name="materiales_oi_disponibles_ids" invisible="1"/>
+                    <field name="tratamientos_oi_disponibles_ids" invisible="1"/>
+
                     <group string="Ojo Derecho">
-                        <field name="material_od_id"/>
-                        <field name="tratamiento_od_id"/>
+                        <field name="material_od_id"
+                               domain="[('id', 'in', materiales_od_disponibles_ids)]"/>
+                        
+                        <field name="tratamiento_od_id"
+                               domain="[('id', 'in', tratamientos_od_disponibles_ids)]"/>
+                        
                         <field name="producto_od_id" readonly="1"/>
                         <field name="precio_od" readonly="1"/>
                     </group>
 
                     <group string="Ojo Izquierdo">
-                        <field name="material_oi_id"/>
-                        <field name="tratamiento_oi_id"/>
+                        <field name="material_oi_id"
+                               domain="[('id', 'in', materiales_oi_disponibles_ids)]"/>
+                        
+                        <field name="tratamiento_oi_id"
+                               domain="[('id', 'in', tratamientos_oi_disponibles_ids)]"/>
+                        
                         <field name="producto_oi_id" readonly="1"/>
                         <field name="precio_oi" readonly="1"/>
                     </group>
