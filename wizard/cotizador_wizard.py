@@ -18,6 +18,43 @@ class OpticaCotizadorWizard(models.TransientModel):
         ('multifocal', 'Multifocal'),
     ], string='Tipo general', readonly=True)
 
+    # --------------------------------------------------------
+    # OPCIONES DISPONIBLES PROGRESIVO
+    # ---------------------------------------------------------
+
+    laboratorios_disponibles_ids = fields.Many2many(
+        'res.partner',
+        'optica_cotizador_laboratorio_rel',
+        'wizard_id',
+        'partner_id',
+        string='Laboratorios disponibles',
+    )
+
+    disenos_disponibles_ids = fields.Many2many(
+        'optica.diseno',
+        'optica_cotizador_diseno_rel',
+        'wizard_id',
+        'diseno_id',
+        string='Diseños disponibles',
+    )
+
+    materiales_disponibles_ids = fields.Many2many(
+        'optica.material',
+        'optica_cotizador_material_prog_rel',
+        'wizard_id',
+        'material_id',
+        string='Materiales disponibles',
+    )
+
+    tratamientos_disponibles_ids = fields.Many2many(
+        'product.attribute.value',
+        'optica_cotizador_tratamiento_prog_rel',
+        'wizard_id',
+        'attribute_value_id',
+        string='Tratamientos disponibles',
+    )
+    
+    
     serie_od = fields.Char(
         string='Serie OD',
         readonly=True,
@@ -373,6 +410,11 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.template_id = False
         self.producto_id = False
 
+        self.laboratorios_disponibles_ids = False
+        self.disenos_disponibles_ids = False
+        self.materiales_disponibles_ids = False
+        self.tratamientos_disponibles_ids = False
+        
         if self.subtipo != 'progresivo':
             return
 
@@ -383,14 +425,8 @@ class OpticaCotizadorWizard(models.TransientModel):
             'progresivo',
         )
 
-        return {
-            'domain': {
-                'laboratorio_id': [
-                    ('id', 'in', laboratorios.ids)
-                ]
-            }
-        }
-
+        self.laboratorios_disponibles_ids = laboratorios
+    
     # ---------------------------------------------------------
     # DISEÑOS
     # ---------------------------------------------------------
@@ -403,6 +439,10 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.template_id = False
         self.producto_id = False
 
+        self.disenos_disponibles_ids = False
+        self.materiales_disponibles_ids = False
+        self.tratamientos_disponibles_ids = False
+
         if not self.laboratorio_id:
             return
 
@@ -414,13 +454,7 @@ class OpticaCotizadorWizard(models.TransientModel):
             'progresivo',
         )
 
-        return {
-            'domain': {
-                'diseno_id': [
-                    ('id', 'in', disenos.ids)
-                ]
-            }
-        }
+        self.disenos_disponibles_ids = disenos
 
     # ---------------------------------------------------------
     # MATERIAL
@@ -432,6 +466,9 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.tratamiento_id = False
         self.template_id = False
         self.producto_id = False
+
+        self.materiales_disponibles_ids = False
+        self.tratamientos_disponibles_ids = False
 
         if not self.diseno_id or not self.laboratorio_id:
             return
@@ -445,13 +482,7 @@ class OpticaCotizadorWizard(models.TransientModel):
 
         materiales = templates.mapped('material_id')
 
-        return {
-            'domain': {
-                'material_id': [
-                    ('id', 'in', materiales.ids)
-                ]
-            }
-        }
+        self.materiales_disponibles_ids = materiales
 
     # ---------------------------------------------------------
     # TEMPLATE + TRATAMIENTOS
@@ -464,6 +495,8 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.producto_id = False
         self.precio = 0.0
 
+        engine = self.env['optica.cotizador.engine']
+        
         if not (
             self.laboratorio_id
             and self.diseno_id
@@ -488,13 +521,7 @@ class OpticaCotizadorWizard(models.TransientModel):
             template
         )
 
-        return {
-            'domain': {
-                'tratamiento_id': [
-                    ('id', 'in', tratamientos.ids)
-                ]
-            }
-        }
+        self.tratamientos_disponibles_ids = tratamientos
 
     # ---------------------------------------------------------
     # VARIANTE FINAL
