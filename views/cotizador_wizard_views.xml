@@ -54,10 +54,13 @@
                         <field name="precio_oi" readonly="1"/>
                     </group>
 
-                    <field name="precio_total" readonly="1"/>
+                    <group>
+                        <label for="precio_total" string="TOTAL LENTES"/>
+                        <field name="precio_total" readonly="1" nolabel="1"/>
+                    </group>
 
                 </group>
-
+                
                 <group string="Configuración Progresivo"
                        invisible="tipo_general != 'multifocal' or subtipo != 'progresivo'">
 
@@ -68,10 +71,13 @@
 
                 </group>
 
-                <group string="Resultado">
+                <group string="Resultado"
+                       invisible="tipo_general == 'monofocal'">
+
                     <field name="template_id" readonly="1"/>
                     <field name="producto_id" readonly="1"/>
                     <field name="precio" readonly="1"/>
+
                 </group>
 
                 <footer>
