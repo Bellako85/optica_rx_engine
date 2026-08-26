@@ -352,12 +352,13 @@ class OpticaCotizadorWizard(models.TransientModel):
             self.precio_oi = self.producto_oi_id.lst_price
 
         self._actualizar_total_monofocal()
-            def _actualizar_total_monofocal(self):
-            for wizard in self:
-                wizard.precio_total = (
-                    (wizard.precio_od or 0.0)
-                    + (wizard.precio_oi or 0.0)
-                )
+            
+    def _actualizar_total_monofocal(self):
+        for wizard in self:
+            wizard.precio_total = (
+                (wizard.precio_od or 0.0)
+                + (wizard.precio_oi or 0.0)
+            )
     
     # ---------------------------------------------------------
     # LABORATORIOS
