@@ -291,6 +291,73 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.tratamientos_oi_disponibles_ids = tratamientos.mapped(
             'product_attribute_value_id'
         )
+
+    @api.onchange('tratamiento_od_id')
+    def _onchange_tratamiento_od_id(self):
+        self.producto_od_id = False
+        self.precio_od = 0.0
+
+        if not (
+            self.serie_od
+            and self.material_od_id
+            and self.tratamiento_od_id
+        ):
+            self._actualizar_total_monofocal()
+            return
+
+        engine = self.env['optica.cotizador.engine']
+        template_mono = self.env['product.template'].browse(409)
+
+        producto = engine.buscar_variante_exacta(
+            template_mono,
+            self.serie_od,
+            self.material_od_id.name,
+            self.tratamiento_od_id.name,
+        )
+
+        self.producto_od_id = producto[:1]
+
+        if self.producto_od_id:
+            self.precio_od = self.producto_od_id.lst_price
+
+        self._actualizar_total_monofocal()
+
+
+    @api.onchange('tratamiento_oi_id')
+    def _onchange_tratamiento_oi_id(self):
+        self.producto_oi_id = False
+        self.precio_oi = 0.0
+
+        if not (
+            self.serie_oi
+            and self.material_oi_id
+            and self.tratamiento_oi_id
+        ):
+            self._actualizar_total_monofocal()
+            return
+
+        engine = self.env['optica.cotizador.engine']
+        template_mono = self.env['product.template'].browse(409)
+
+        producto = engine.buscar_variante_exacta(
+            template_mono,
+            self.serie_oi,
+            self.material_oi_id.name,
+            self.tratamiento_oi_id.name,
+        )
+
+        self.producto_oi_id = producto[:1]
+
+        if self.producto_oi_id:
+            self.precio_oi = self.producto_oi_id.lst_price
+
+        self._actualizar_total_monofocal()
+            def _actualizar_total_monofocal(self):
+            for wizard in self:
+                wizard.precio_total = (
+                    (wizard.precio_od or 0.0)
+                    + (wizard.precio_oi or 0.0)
+                )
     
     # ---------------------------------------------------------
     # LABORATORIOS
