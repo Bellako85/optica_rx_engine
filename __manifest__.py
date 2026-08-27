@@ -5,7 +5,7 @@
     'version': '17.0.1.0.0',
     'category': 'Sales',
     'summary': 'Motor de reglas para cotización óptica',
-    'author': 'Optica Zamora',
+    'author': 'Christian Torres Optica Zamora',
     'license': 'LGPL-3',
     'depends': [
         'base',
@@ -16,6 +16,7 @@
     'data': [
         'security/ir.model.access.csv',
         'views/cotizador_wizard_views.xml',
+        'views/product_template_views.xml',
     ],
     
     'installable': True,
