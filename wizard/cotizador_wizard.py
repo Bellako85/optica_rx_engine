@@ -203,10 +203,10 @@ class OpticaCotizadorWizard(models.TransientModel):
             wizard.serie_oi = False
 
             # Campos progresivo/general
-            wizard.laboratorio_id = False
-            wizard.diseno_id = False
-            wizard.material_id = False
-            wizard.tratamiento_id = False
+            wizard.laboratorios_disponibles_ids = False
+            wizard.disenos_disponibles_ids = False
+            wizard.materiales_disponibles_ids = False
+            wizard.tratamientos_disponibles_ids = False
             wizard.template_id = False
             wizard.producto_id = False
             wizard.precio = 0.0
@@ -494,8 +494,6 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.template_id = False
         self.producto_id = False
         self.precio = 0.0
-
-        engine = self.env['optica.cotizador.engine']
         
         if not (
             self.laboratorio_id
