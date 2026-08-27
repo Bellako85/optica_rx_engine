@@ -64,10 +64,27 @@
                 <group string="Configuración Progresivo"
                        invisible="tipo_general != 'multifocal' or subtipo != 'progresivo'">
 
-                    <field name="laboratorio_id"/>
-                    <field name="diseno_id"/>
-                    <field name="material_id"/>
-                    <field name="tratamiento_id"/>
+                        <!-- Campos auxiliares para los domains -->
+                    <field name="laboratorios_disponibles_ids" invisible="1"/>
+                    <field name="disenos_disponibles_ids" invisible="1"/>
+                    <field name="materiales_disponibles_ids" invisible="1"/>
+                    <field name="tratamientos_disponibles_ids" invisible="1"/>
+
+                    <field name="laboratorio_id"
+                           domain="[('id', 'in', laboratorios_disponibles_ids)]"
+                           options="{'no_create': True, 'no_open': True}"/>
+
+                    <field name="diseno_id"
+                           domain="[('id', 'in', disenos_disponibles_ids)]"
+                           options="{'no_create': True, 'no_open': True}"/>
+
+                    <field name="material_id"
+                           domain="[('id', 'in', materiales_disponibles_ids)]"
+                           options="{'no_create': True, 'no_open': True}"/>
+
+                    <field name="tratamiento_id"
+                           domain="[('id', 'in', tratamientos_disponibles_ids)]"
+                           options="{'no_create': True, 'no_open': True}"/>
 
                 </group>
 
