@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_product_template_form_optica_rx" model="ir.ui.view">
+        <field name="name">product.template.form.optica.rx</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+
+                <page string="Óptica RX" name="optica_rx">
+
+                    <group>
+
+                        <group string="Clasificación">
+                            <field name="disponible_cotizador"/>
+                            <field name="rx_tipo"/>
+                            <field name="rx_fabricacion"/>
+
+                            <field name="laboratorio_id"
+                                   options="{'no_create': True}"/>
+
+                            <field name="rx_series_ids"
+                                   widget="many2many_tags"/>
+                        </group>
+
+                        <group string="Configuración">
+                            <field name="diseno_id"
+                                   domain="[('laboratorio_id', '=', laboratorio_id),
+                                            ('activo_cotizador', '=', True)]"
+                                   options="{'no_create': True}"/>
+
+                            <field name="material_id"
+                                   options="{'no_create': True}"/>
+
+                            <field name="tratamiento_ids"
+                                   widget="many2many_tags"/>
+
+                            <field name="prioridad_cotizador"/>
+                        </group>
+
+                    </group>
+
+                    <group string="Información del cotizador">
+                        <field name="descripcion_cotizador"/>
+                        <field name="observaciones_optica"/>
+                    </group>
+
+                </page>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
