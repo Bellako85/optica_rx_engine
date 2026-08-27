@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_optica_cotizador_wizard_user,optica.cotizador.wizard.user,model_optica_cotizador_wizard,base.group_user,1,1,1,1
+access_optica_diseno_user,optica.diseno.user,model_optica_diseno,base.group_user,1,0,0,0
+access_optica_material_user,optica.material.user,model_optica_material,base.group_user,1,0,0,0
