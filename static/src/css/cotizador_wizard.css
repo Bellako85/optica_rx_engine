@@ -1,0 +1,205 @@
+/* ==========================================================
+   COTIZADOR ÓPTICO - NEURO GLASS
+   ========================================================== */
+
+.o_optica_cotizador_glass {
+    background: #eef2f7 !important;
+    padding: 18px !important;
+}
+
+
+/* ==========================================================
+   TARJETAS PRINCIPALES
+   ========================================================== */
+
+.o_optica_cotizador_glass .rx-card {
+    background: rgba(238, 242, 247, 0.88);
+
+    border: 1px solid rgba(255, 255, 255, 0.70);
+    border-radius: 20px;
+
+    padding: 18px;
+    margin-bottom: 18px;
+
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    box-shadow:
+        10px 10px 24px rgba(163,177,198,.35),
+        -10px -10px 24px rgba(255,255,255,.95);
+
+    transition: .25s ease;
+}
+
+
+.o_optica_cotizador_glass .rx-card:hover {
+    box-shadow:
+        14px 14px 28px rgba(163,177,198,.40),
+        -14px -14px 28px rgba(255,255,255,1);
+}
+
+
+/* ==========================================================
+   OJOS
+   ========================================================== */
+
+.o_optica_cotizador_glass .rx-eye {
+    background: #eef2f7;
+
+    border-radius: 16px;
+    padding: 16px;
+
+    box-shadow:
+        inset 5px 5px 10px rgba(163,177,198,.30),
+        inset -5px -5px 10px rgba(255,255,255,.95);
+}
+
+
+.o_optica_cotizador_glass .rx-eye-od {
+    border-left: 5px solid #2563eb;
+}
+
+
+.o_optica_cotizador_glass .rx-eye-oi {
+    border-left: 5px solid #7c3aed;
+}
+
+
+/* ==========================================================
+   PROGRESIVO
+   ========================================================== */
+
+.o_optica_cotizador_glass .rx-progressive {
+    border-left: 5px solid #00897b;
+}
+
+
+/* ==========================================================
+   SERIES
+   ========================================================== */
+
+.o_optica_cotizador_glass .rx-series {
+    border-left: 5px solid #3498db;
+}
+
+
+/* ==========================================================
+   RESULTADO
+   ========================================================== */
+
+.o_optica_cotizador_glass .rx-result {
+    border-left: 5px solid #27ae60;
+}
+
+
+/* ==========================================================
+   CAMPOS
+   ========================================================== */
+
+.o_optica_cotizador_glass .o_field_widget {
+    border-radius: 10px;
+}
+
+
+.o_optica_cotizador_glass .o_input {
+    background: rgba(255,255,255,.55) !important;
+
+    border: 1px solid rgba(255,255,255,.70) !important;
+    border-radius: 10px !important;
+
+    padding: 7px 10px !important;
+
+    box-shadow:
+        inset 2px 2px 5px rgba(163,177,198,.20),
+        inset -2px -2px 5px rgba(255,255,255,.75);
+}
+
+
+.o_optica_cotizador_glass .o_input:focus {
+    border-color: #7c3aed !important;
+
+    box-shadow:
+        0 0 0 3px rgba(124,58,237,.10),
+        inset 2px 2px 5px rgba(163,177,198,.18);
+}
+
+
+/* ==========================================================
+   ETIQUETAS
+   ========================================================== */
+
+.o_optica_cotizador_glass .o_form_label {
+    color: #475569;
+    font-weight: 650;
+}
+
+
+/* ==========================================================
+   TÍTULOS DE GRUPO
+   ========================================================== */
+
+.o_optica_cotizador_glass .o_horizontal_separator {
+    color: #334155;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    letter-spacing: .04em;
+}
+
+
+/* ==========================================================
+   BOTÓN CERRAR
+   ========================================================== */
+
+.o_optica_cotizador_glass footer .btn-secondary {
+    border: none !important;
+
+    color: white !important;
+
+    padding: 10px 18px !important;
+
+    border-radius: 14px !important;
+
+    font-weight: 700 !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb 0%,
+            #7c3aed 100%
+        ) !important;
+
+    box-shadow:
+        0 8px 20px rgba(37,99,235,.16) !important;
+
+    transition: .15s ease !important;
+}
+
+
+.o_optica_cotizador_glass footer .btn-secondary:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 28px rgba(0,0,0,.20) !important;
+
+    filter: brightness(1.04);
+}
+
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 768px) {
+
+    .o_optica_cotizador_glass {
+        padding: 8px !important;
+    }
+
+    .o_optica_cotizador_glass .rx-card {
+        padding: 12px;
+        border-radius: 16px;
+    }
+
+}
