@@ -5,7 +5,8 @@
         <field name="name">optica.cotizador.wizard.form</field>
         <field name="model">optica.cotizador.wizard</field>
         <field name="arch" type="xml">
-            <form string="Cotizador Óptico">
+            <form string="Cotizador Óptico"
+                  class="o_optica_cotizador_glass">
 
                 <group>
                     <field name="graduacion_id"/>
@@ -16,6 +17,7 @@
                 </group>
 
                 <group string="Series para laboratorio"
+                       class="rx-card rx-series"
                        invisible="tipo_general != 'monofocal'">
 
                     <field name="serie_od" readonly="1"/>
@@ -24,6 +26,7 @@
                 </group>
 
                 <group string="Configuración Monofocal"
+                       class="rx-card rx-monofocal"
                        invisible="tipo_general != 'monofocal'">
 
                     <!-- Campos auxiliares para los domains -->
@@ -32,7 +35,9 @@
                     <field name="materiales_oi_disponibles_ids" invisible="1"/>
                     <field name="tratamientos_oi_disponibles_ids" invisible="1"/>
 
-                    <group string="Ojo Derecho">
+                    <group string="Ojo Derecho"
+                           class="rx-eye rx-eye-od">
+                        
                         <field name="material_od_id"
                                domain="[('id', 'in', materiales_od_disponibles_ids)]"/>
                         
@@ -43,7 +48,9 @@
                         <field name="precio_od" readonly="1"/>
                     </group>
 
-                    <group string="Ojo Izquierdo">
+                    <group string="Ojo Izquierdo"
+                           class="rx-eye rx-eye-oi">
+                        
                         <field name="material_oi_id"
                                domain="[('id', 'in', materiales_oi_disponibles_ids)]"/>
                         
@@ -61,7 +68,8 @@
 
                 </group>
                 
-                <group string="Configuración Progresivo"
+               <group string="Configuración Progresivo"
+                       class="rx-card rx-progressive"
                        invisible="tipo_general != 'multifocal' or subtipo != 'progresivo'">
 
                         <!-- Campos auxiliares para los domains -->
@@ -89,6 +97,7 @@
                 </group>
 
                 <group string="Resultado"
+                       class="rx-card rx-result"
                        invisible="tipo_general == 'monofocal'">
 
                     <field name="template_id" readonly="1"/>
