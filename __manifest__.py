@@ -22,8 +22,8 @@
     'assets': {
         'web.assets_backend': [
             'optica_rx_engine/static/src/css/cotizador_wizard.css',
-    ],
-},
+        ],
+    },
     
     'installable': True,
     'application': True,
