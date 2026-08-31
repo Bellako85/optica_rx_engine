@@ -11,6 +11,7 @@
         'base',
         'product',
         'odoo_graduacion_paciente',
+        'views/graduacion_views.xml',
     ],
 
     'data': [
