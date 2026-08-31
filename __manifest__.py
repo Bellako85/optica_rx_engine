@@ -11,13 +11,13 @@
         'base',
         'product',
         'odoo_graduacion_paciente',
-        'views/graduacion_views.xml',
     ],
 
     'data': [
         'security/ir.model.access.csv',
         'views/cotizador_wizard_views.xml',
         'views/product_template_views.xml',
+        'views/graduacion_views.xml',
     ],
 
     'assets': {
