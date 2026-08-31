@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_graduacion_form_inherit_cotizador_rx" model="ir.ui.view">
+        <field name="name">optica.graduacion.form.cotizador.rx</field>
+        <field name="model">optica.graduacion</field>
+
+        <field name="inherit_id"
+               ref="odoo_graduacion_paciente.view_graduacion_form"/>
+
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+
+                <button name="action_cotizar_lentes"
+                        type="object"
+                        string="Cotizar Lentes"
+                        class="btn-primary mi-btn shadow-effect"/>
+
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
