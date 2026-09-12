@@ -73,6 +73,15 @@
     border-left: 5px solid #00897b;
 }
 
+.o_optica_cotizador_glass .rx-progressive {
+    position: relative;
+    z-index: 10;
+}
+
+.o_optica_cotizador_glass .rx-result {
+    position: relative;
+    z-index: 1;
+}
 
 /* ==========================================================
    SERIES
