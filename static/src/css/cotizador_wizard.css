@@ -197,6 +197,27 @@
 
 
 /* ==========================================================
+   MONTURA Y TOTAL DE COTIZACIÓN
+   ========================================================== */
+
+.o_optica_cotizador_glass .rx-frame {
+    border-left: 5px solid #7c3aed;
+}
+
+.o_optica_cotizador_glass .rx-frame
+.o_field_widget[name="total_cotizacion"] {
+    color: #2563eb;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.o_optica_cotizador_glass .rx-frame
+.o_field_widget[name="precio_montura"] {
+    font-weight: 650;
+}
+
+
+/* ==========================================================
    RESPONSIVE
    ========================================================== */
 
