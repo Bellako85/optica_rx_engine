@@ -577,28 +577,28 @@ class OpticaCotizadorWizard(models.TransientModel):
 
 
     def _actualizar_total(self):
-    for wizard in self:
+        for wizard in self:
 
-        if wizard.tipo_general == 'monofocal':
-            if wizard.producto_od_id and wizard.producto_oi_id:
-                wizard.total_cotizacion = (
-                    (wizard.precio_total or 0.0)
-                    + (wizard.precio_montura or 0.0)
-                )
+            if wizard.tipo_general == 'monofocal':
+                if wizard.producto_od_id and wizard.producto_oi_id:
+                    wizard.total_cotizacion = (
+                        (wizard.precio_total or 0.0)
+                        + (wizard.precio_montura or 0.0)
+                    )
+                else:
+                    wizard.total_cotizacion = 0.0
+
+            elif wizard.tipo_general == 'multifocal':
+                if wizard.producto_id:
+                    wizard.total_cotizacion = (
+                        (wizard.precio or 0.0)
+                        + (wizard.precio_montura or 0.0)
+                    )
+                else:
+                    wizard.total_cotizacion = 0.0
+
             else:
                 wizard.total_cotizacion = 0.0
-
-        elif wizard.tipo_general == 'multifocal':
-            if wizard.producto_id:
-                wizard.total_cotizacion = (
-                    (wizard.precio or 0.0)
-                    + (wizard.precio_montura or 0.0)
-                )
-            else:
-                wizard.total_cotizacion = 0.0
-
-        else:
-            wizard.total_cotizacion = 0.0
 
     
 
