@@ -243,7 +243,7 @@ class OpticaCotizadorWizard(models.TransientModel):
             wizard.precio_oi = 0.0
 
             wizard.precio_total = 0.0
-            wizard.total_cotizacion = 0.0.
+            wizard.total_cotizacion = 0.0
 
             if not wizard.graduacion_id:
                 continue
