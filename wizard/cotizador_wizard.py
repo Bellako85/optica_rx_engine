@@ -190,7 +190,7 @@ class OpticaCotizadorWizard(models.TransientModel):
         readonly=True,
     )
 
-    montura_id = fields.many2one(
+    montura_id = fields.Many2one(
         'product.product',
         string='Montura',
     )
@@ -201,7 +201,7 @@ class OpticaCotizadorWizard(models.TransientModel):
     )
 
     total_cotizacion = fields.Float(
-        string='Total Cotizacion'
+        string='Total Cotizacion',
         readonly=True,
     )
 
@@ -412,7 +412,7 @@ class OpticaCotizadorWizard(models.TransientModel):
                 + (wizard.precio_oi or 0.0)
             )
 
-        self._actualizat_total()
+        self._actualizar_total()
     # ---------------------------------------------------------
     # LABORATORIOS
     # ---------------------------------------------------------
@@ -561,7 +561,7 @@ class OpticaCotizadorWizard(models.TransientModel):
         if producto:
             self.precio = producto.lst_price
     
-        self._actualizat_total()
+        self._actualizar_total()
     # ----------------------------------------------------------
     # MONTURA Y TOTAL
     # ----------------------------------------------------------
@@ -573,20 +573,33 @@ class OpticaCotizadorWizard(models.TransientModel):
         else:
             self.precio_montura = 0.0
 
-        self._actualizat_total()
+        self._actualizar_total()
+
 
     def _actualizar_total(self):
-        for wizard in self:
+    for wizard in self:
 
         if wizard.tipo_general == 'monofocal':
-            wizard.total_cotizacion = (
-                (mizard.precio_total or 0.0)
-                + (wizard.precio_montura or 0.0)
-            )
+            if wizard.producto_od_id and wizard.producto_oi_id:
+                wizard.total_cotizacion = (
+                    (wizard.precio_total or 0.0)
+                    + (wizard.precio_montura or 0.0)
+                )
+            else:
+                wizard.total_cotizacion = 0.0
+
+        elif wizard.tipo_general == 'multifocal':
+            if wizard.producto_id:
+                wizard.total_cotizacion = (
+                    (wizard.precio or 0.0)
+                    + (wizard.precio_montura or 0.0)
+                )
+            else:
+                wizard.total_cotizacion = 0.0
 
         else:
-            wizard.total_cotizacion = (
-                (wizard.precio or 0.0)
-                + (wizard.precio_montura or 0.0)
-            )
+            wizard.total_cotizacion = 0.0
+
+    
+
     
