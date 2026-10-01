@@ -411,7 +411,8 @@ class OpticaCotizadorWizard(models.TransientModel):
                 (wizard.precio_od or 0.0)
                 + (wizard.precio_oi or 0.0)
             )
-    
+
+        self._actualizat_total()
     # ---------------------------------------------------------
     # LABORATORIOS
     # ---------------------------------------------------------
@@ -559,3 +560,33 @@ class OpticaCotizadorWizard(models.TransientModel):
 
         if producto:
             self.precio = producto.lst_price
+    
+        self._actualizat_total()
+    # ----------------------------------------------------------
+    # MONTURA Y TOTAL
+    # ----------------------------------------------------------
+
+    @api.onchange('montura_id')
+    def _onchange_montura_id(self):
+        if self.montura_id:
+            self.precio_montura = self.montura_id.lst_price
+        else:
+            self.precio_montura = 0.0
+
+        self._actualizat_total()
+
+    def _actualizar_total(self):
+        for wizard in self:
+
+        if wizard.tipo_general == 'monofocal':
+            wizard.total_cotizacion = (
+                (mizard.precio_total or 0.0)
+                + (wizard.precio_montura or 0.0)
+            )
+
+        else:
+            wizard.total_cotizacion = (
+                (wizard.precio or 0.0)
+                + (wizard.precio_montura or 0.0)
+            )
+    
