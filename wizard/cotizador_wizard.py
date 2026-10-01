@@ -190,6 +190,21 @@ class OpticaCotizadorWizard(models.TransientModel):
         readonly=True,
     )
 
+    montura_id = fields.many2one(
+        'product.product',
+        string='Montura',
+    )
+
+    precio_montura = fields.Float(
+        string='Precio Montura',
+        readonly=True,
+    )
+
+    total_cotizacion = fields.Float(
+        string='Total Cotizacion'
+        readonly=True,
+    )
+
     # ---------------------------------------------------------
     # GRADUACIÓN
     # ---------------------------------------------------------
