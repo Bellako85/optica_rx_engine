@@ -106,6 +106,16 @@
 
                 </group>
 
+            <div class="rx-card rx-frame">
+                <group string="Montura y cotización">
+                    <field name="montura_id"/>
+                    <field name="precio_montura" readonly="1"/>
+                    <field name="total_cotizacion"
+                           readonly="1"
+                           invisible="total_cotizacion == 0"/>
+                </group>
+            </div>
+
                 <footer>
                     <button string="Cerrar"
                             class="btn-secondary"
