@@ -243,6 +243,7 @@ class OpticaCotizadorWizard(models.TransientModel):
             wizard.precio_oi = 0.0
 
             wizard.precio_total = 0.0
+            wizard.total_cotizacion = 0.0.
 
             if not wizard.graduacion_id:
                 continue
@@ -295,6 +296,7 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.producto_od_id = False
         self.precio_od = 0.0
         self.tratamientos_od_disponibles_ids = False
+        self._actualizar_total_monofocal()
 
         if not self.material_od_id or not self.serie_od:
             return
@@ -323,6 +325,7 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.producto_oi_id = False
         self.precio_oi = 0.0
         self.tratamientos_oi_disponibles_ids = False
+        self._actualizar_total_monofocal()            
 
         if not self.material_oi_id or not self.serie_oi:
             return
@@ -430,6 +433,8 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.disenos_disponibles_ids = False
         self.materiales_disponibles_ids = False
         self.tratamientos_disponibles_ids = False
+
+        self._actualizar_total()
         
         if self.subtipo != 'progresivo':
             return
@@ -459,6 +464,8 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.materiales_disponibles_ids = False
         self.tratamientos_disponibles_ids = False
 
+        self._actualizar_total()
+        
         if not self.laboratorio_id:
             return
 
@@ -486,6 +493,8 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.materiales_disponibles_ids = False
         self.tratamientos_disponibles_ids = False
 
+        self._actualizar_total()
+        
         if not self.diseno_id or not self.laboratorio_id:
             return
 
@@ -510,6 +519,7 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.template_id = False
         self.producto_id = False
         self.precio = 0.0
+        self._actualizar_total()    
         
         if not (
             self.laboratorio_id
@@ -547,6 +557,7 @@ class OpticaCotizadorWizard(models.TransientModel):
         self.precio = 0.0
 
         if not self.template_id or not self.tratamiento_id:
+            self._actualizar_total()
             return
 
         engine = self.env['optica.cotizador.engine']
