@@ -11,7 +11,7 @@
                 <group>
                     <field name="partner_id"/>
                     <field name="graduacion_id"/>
-                    <field name="tipo_general" readonly="1"/>
+                    <field name="tipo_general" readonly="1" force_save="1"/>
 
                     <field name="subtipo"
                            invisible="tipo_general != 'multifocal'"/>
@@ -45,7 +45,7 @@
                         <field name="tratamiento_od_id"
                                domain="[('id', 'in', tratamientos_od_disponibles_ids)]"/>
                         
-                        <field name="producto_od_id" readonly="1"/>
+                        <field name="producto_od_id" readonly="1" force_save="1"/>
                         <field name="precio_od" readonly="1"/>
                     </group>
 
@@ -58,7 +58,7 @@
                         <field name="tratamiento_oi_id"
                                domain="[('id', 'in', tratamientos_oi_disponibles_ids)]"/>
                         
-                        <field name="producto_oi_id" readonly="1"/>
+                        <field name="producto_oi_id" readonly="1" force_save="1"/>
                         <field name="precio_oi" readonly="1"/>
                     </group>
 
@@ -102,7 +102,7 @@
                        invisible="tipo_general == 'monofocal'">
 
                     <field name="template_id" readonly="1"/>
-                    <field name="producto_id" readonly="1"/>
+                    <field name="producto_id" readonly="1" force_save="1"/>
                     <field name="precio" readonly="1"/>
 
                 </group>
