@@ -10,6 +10,7 @@
     'depends': [
         'base',
         'product',
+        'sale',
         'odoo_graduacion_paciente',
     ],
 
