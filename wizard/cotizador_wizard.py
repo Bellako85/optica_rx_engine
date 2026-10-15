@@ -15,8 +15,34 @@ class OpticaCotizadorWizard(models.TransientModel):
         required=True,
     )
 
+    sale_order_id = fields.Many2one(
+        'sale.order',
+        string='Cotización generada',
+        readonly=True,
+        copy=False,
+    )
+
     def action_crear_cotizacion(self):
         self.ensure_one()
+        
+        # Evitar que dos clics generen cotizaciones duplicadas.
+        self.env.cr.execute(
+            'SELECT id FROM optica_cotizador_wizard WHERE id = %s FOR UPDATE',
+            [self.id],
+        )
+        self.invalidate_recordset(['sale_order_id'])
+
+        # Si ya generamos una cotización, abrir la misma.
+        if self.sale_order_id:
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Cotización',
+                'res_model': 'sale.order',
+                'view_mode': 'form',
+                'res_id': self.sale_order_id.id,
+                'target': 'current',
+            }
+
 
         if not self.partner_id:
             raise UserError('Selecciona un cliente para generar la cotización.')
