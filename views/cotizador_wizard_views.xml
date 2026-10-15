@@ -9,6 +9,7 @@
                   class="o_optica_cotizador_glass">
 
                 <group>
+                    <field name="partner_id"/>
                     <field name="graduacion_id"/>
                     <field name="tipo_general" readonly="1"/>
 
