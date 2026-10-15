@@ -95,7 +95,7 @@ class OpticaCotizadorWizard(models.TransientModel):
                 'price_unit': producto.lst_price,
             })
 
-                self.sale_order_id = pedido.id
+        self.sale_order_id = pedido.id
         
         return {
             'type': 'ir.actions.act_window',
