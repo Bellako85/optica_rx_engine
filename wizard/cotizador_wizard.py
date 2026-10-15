@@ -7,6 +7,13 @@ class OpticaCotizadorWizard(models.TransientModel):
     _name = 'optica.cotizador.wizard'
     _description = 'Cotizador Óptico'
 
+
+    partner_id = fields.Many2one(
+        'res.partner',
+        string='Cliente',
+        required=True,
+    )
+
     graduacion_id = fields.Many2one(
         'optica.graduacion',
         string='Graduación',
