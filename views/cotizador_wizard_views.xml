@@ -14,7 +14,7 @@
                     <field name="tipo_general" readonly="1" force_save="1"/>
 
                     <field name="subtipo"
-                           invisible="tipo_general != 'multifocal' force_save="1"/>
+                           invisible="tipo_general != 'multifocal'" force_save="1"/>
                 </group>
 
                 <group string="Series para laboratorio"
