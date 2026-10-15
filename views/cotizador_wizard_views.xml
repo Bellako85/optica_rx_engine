@@ -9,6 +9,7 @@
                   class="o_optica_cotizador_glass">
 
                 <group>
+                    <field name="partner_id"/>
                     <field name="graduacion_id"/>
                     <field name="tipo_general" readonly="1"/>
 
@@ -117,6 +118,11 @@
             </div>
 
                 <footer>
+                    <button name="action_crear_cotizacion"
+                            string="Crear cotización"
+                            type="object"
+                            class="btn-primary"
+                            groups="sales_team.group_sale_salesman"/>
                     <button string="Cerrar"
                             class="btn-secondary"
                             special="cancel"/>

@@ -2,7 +2,7 @@
 
 {
     'name': 'Optica RX Engine',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.1.0',
     'category': 'Sales',
     'summary': 'Motor de reglas para cotización óptica',
     'author': 'Christian Torres Optica Zamora',
@@ -10,6 +10,7 @@
     'depends': [
         'base',
         'product',
+        'sale',
         'odoo_graduacion_paciente',
     ],
 

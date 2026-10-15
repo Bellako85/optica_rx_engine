@@ -1,11 +1,113 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 
 class OpticaCotizadorWizard(models.TransientModel):
     _name = 'optica.cotizador.wizard'
     _description = 'Cotizador Óptico'
+
+    partner_id = fields.Many2one('res.partner', string='Cliente')
+    sale_order_id = fields.Many2one(
+        'sale.order', string='Cotización creada', readonly=True, copy=False,
+    )
+
+    def _productos_cotizacion(self):
+        """Resolve from editable selections; readonly onchange values are not saved."""
+        self.ensure_one()
+        if not self.graduacion_id:
+            raise UserError('Selecciona una graduación.')
+        engine = self.env['optica.cotizador.engine']
+        tipo = engine.determinar_tipo_lente(self.graduacion_id)
+        productos = []
+        if tipo == 'monofocal':
+            series = engine.determinar_serie(self.graduacion_id)
+            template = self.env['product.template'].browse(409).exists()
+            for ojo in ('od', 'oi'):
+                material = self['material_%s_id' % ojo]
+                tratamiento = self['tratamiento_%s_id' % ojo]
+                producto = engine.buscar_variante_exacta(
+                    template, series.get(ojo), material.name, tratamiento.name,
+                )[:1]
+                if not producto:
+                    raise UserError('Completa la configuración del ojo %s.' % ojo.upper())
+                productos.append((producto, ojo.upper()))
+        elif tipo == 'multifocal' and self.subtipo == 'progresivo':
+            template = engine.buscar_template_progresivo(
+                self.laboratorio_id, self.diseno_id, self.material_id,
+            )
+            producto = engine.obtener_o_crear_variante_progresivo(
+                template, self.tratamiento_id,
+            )
+            if not producto:
+                raise UserError('Completa la configuración del lente progresivo.')
+            productos.append((producto, 'Progresivo'))
+        else:
+            raise UserError('Esta configuración todavía no tiene un producto cotizable.')
+        if self.montura_id:
+            productos.append((self.montura_id, 'Montura'))
+        for producto, etiqueta in productos:
+            if not producto.active or not producto.sale_ok:
+                raise UserError('El producto %s no está disponible para venta.' % producto.display_name)
+            if producto.company_id and producto.company_id != self.env.company:
+                raise UserError('El producto %s pertenece a otra empresa.' % producto.display_name)
+        return productos
+
+    def action_crear_cotizacion(self):
+        self.ensure_one()
+        self.check_access_rights('write')
+        self.check_access_rule('write')
+        # Serialize repeated clicks on this saved wizard.
+        self.env.cr.execute(
+            'SELECT id FROM optica_cotizador_wizard WHERE id = %s FOR UPDATE',
+            [self.id],
+        )
+        self.invalidate_recordset(['sale_order_id'])
+        order = self.sale_order_id
+        if not order:
+            if not self.partner_id:
+                raise UserError('Selecciona el cliente de la cotización.')
+            productos = self._productos_cotizacion()
+            order = self.env['sale.order'].create({
+                'partner_id': self.partner_id.id,
+                'company_id': self.env.company.id,
+                'origin': 'Cotizador óptico - %s' % self.graduacion_id.display_name,
+            })
+            lineas = []
+            for producto, etiqueta in productos:
+                # Keep the catalog price used by the wizard, in the order currency.
+                precio = self.env.company.currency_id._convert(
+                    producto.lst_price, order.currency_id, order.company_id,
+                    fields.Date.to_date(order.date_order),
+                )
+                impuestos = producto.taxes_id.filtered(
+                    lambda tax: tax.company_id == order.company_id
+                )
+                impuestos_destino = order.fiscal_position_id.map_tax(impuestos)
+                precio = self.env['account.tax']._fix_tax_included_price_company(
+                    precio, impuestos, impuestos_destino, order.company_id,
+                )
+                lineas.append((0, 0, {
+                    'product_id': producto.id,
+                    'name': '%s - %s' % (etiqueta, producto.display_name),
+                    'product_uom_qty': 1.0,
+                    'product_uom': producto.uom_id.id,
+                    'price_unit': precio,
+                    'discount': 0.0,
+                    'tax_id': [(6, 0, impuestos_destino.ids)],
+                }))
+            order.write({'order_line': lineas})
+            self.sale_order_id = order
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Cotización',
+            'res_model': 'sale.order',
+            'view_mode': 'form',
+            'res_id': order.id,
+            'target': 'current',
+            'context': {},
+        }
 
     graduacion_id = fields.Many2one(
         'optica.graduacion',
