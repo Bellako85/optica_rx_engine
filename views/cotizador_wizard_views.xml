@@ -115,13 +115,18 @@
                            invisible="total_cotizacion == 0"/>
                 </group>
             </div>
-
+               
                 <footer>
+                    <button name="action_crear_cotizacion"
+                            string="Generar cotización"
+                            type="object"
+                            class="btn-primary"
+                            groups="sales_team.group_sale_salesman"/>
                     <button string="Cerrar"
                             class="btn-secondary"
                             special="cancel"/>
                 </footer>
-
+            
             </form>
         </field>
     </record>
