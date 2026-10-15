@@ -92,8 +92,11 @@ class OpticaCotizadorWizard(models.TransientModel):
                     etiqueta, producto.display_name
                 ),
                 'product_uom_qty': 1.0,
+                'price_unit': producto.lst_price,
             })
 
+                self.sale_order_id = pedido.id
+        
         return {
             'type': 'ir.actions.act_window',
             'name': 'Cotización',
