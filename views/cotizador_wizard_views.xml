@@ -11,7 +11,7 @@
                 <group>
                     <field name="partner_id"/>
                     <field name="graduacion_id"/>
-                    <field name="tipo_general" readonly="1"/>
+                    <field name="tipo_general" readonly="1" force_save="1"/>
 
                     <field name="subtipo"
                            invisible="tipo_general != 'multifocal'"/>
