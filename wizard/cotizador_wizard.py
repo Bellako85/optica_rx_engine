@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 
 class OpticaCotizadorWizard(models.TransientModel):
@@ -14,6 +15,68 @@ class OpticaCotizadorWizard(models.TransientModel):
         required=True,
     )
 
+    def action_crear_cotizacion(self):
+        self.ensure_one()
+
+        if not self.partner_id:
+            raise UserError('Selecciona un cliente para generar la cotización.')
+
+        if not self.graduacion_id:
+            raise UserError('Selecciona una graduación.')
+
+        # Reutilizar los productos ya identificados por el cotizador.
+        productos = []
+
+        if self.tipo_general == 'monofocal':
+            if not self.producto_od_id or not self.producto_oi_id:
+                raise UserError(
+                    'Completa la selección de lentes OD y OI.'
+                )
+
+            productos = [
+                (self.producto_od_id, 'Ojo derecho'),
+                (self.producto_oi_id, 'Ojo izquierdo'),
+            ]
+
+        elif self.tipo_general == 'multifocal':
+            if not self.producto_id:
+                raise UserError(
+                    'Completa la configuración del lente multifocal.'
+                )
+            productos = [(self.producto_id, 'Lente multifocal')]
+
+        else:
+            raise UserError('No hay productos de lentes para cotizar.')
+
+        if self.montura_id:
+            productos.append((self.montura_id, 'Montura'))
+
+        # Crear cotización en borrador.
+        pedido = self.env['sale.order'].create({
+            'partner_id': self.partner_id.id,
+            'origin': 'Cotizador óptico - %s' % self.graduacion_id.display_name,
+        })
+
+        for producto, etiqueta in productos:
+            # Usar la lógica estándar de Ventas de Odoo 17.
+            self.env['sale.order.line'].create({
+                'order_id': pedido.id,
+                'product_id': producto.id,
+                'name': '%s - %s' % (
+                    etiqueta, producto.display_name
+                ),
+                'product_uom_qty': 1.0,
+            })
+
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Cotización',
+            'res_model': 'sale.order',
+            'view_mode': 'form',
+            'res_id': pedido.id,
+            'target': 'current',
+        }
+    
     graduacion_id = fields.Many2one(
         'optica.graduacion',
         string='Graduación',
